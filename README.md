@@ -2,12 +2,15 @@
 
 Portfolio personal de Teo Fassardi, Full Stack Developer y estudiante de Ingeniería en Sistemas. Trabajo Práctico N.º 1.
 
+- **Sitio público:** https://portfolio-nine-swart-86.vercel.app/
+- **Repositorio:** https://github.com/fassardi245/Portfolio
+
 ## Stack
 
 - Astro 7 para generar el sitio estático.
 - HTML semántico y CSS responsive, sin frameworks de estilos.
 - TypeScript para las interacciones de tema, navegación y copia de email.
-- DM Sans y Barlow Condensed servidas por Google Fonts, con fuentes de respaldo.
+- DM Sans y Barlow Condensed alojadas en `public/fonts`, con licencias OFL y fuentes de respaldo.
 - Retrato personal optimizado a WebP con Astro, versiones responsive y encuadre mediante CSS.
 - Identidad visual en negro, amarillo y rojo, con modo claro y oscuro.
 
@@ -58,6 +61,8 @@ El tema inicial respeta el sistema; al cambiarlo se guarda la preferencia en loc
 
 ## Lighthouse
 
+Verificación del deploy: la URL pública respondió correctamente, incluido el PDF. Lighthouse móvil midió **87 Performance / 100 Accessibility** ([informe público](docs/lighthouse/public.html)). Se optimizó la carga alojando las fuentes WOFF2 en el proyecto: el build actualizado obtuvo **100 / 100 localmente** ([informe optimizado](docs/lighthouse/fonts-local.html)). Esta optimización debe subirse a GitHub y medirse nuevamente en Vercel; el resultado local no sustituye la medición pública.
+
 Medición del 1 de octubre de 2026 con Lighthouse 13.5.0, sobre `npm run build` servido localmente con `npm run preview`. Las puntuaciones no corresponden todavía a un deploy público.
 
 | Perfil | Performance | Accessibility | Informe |
@@ -75,6 +80,6 @@ npx lighthouse http://localhost:4321 --only-categories=performance,accessibility
 
 Usar la URL que indique el preview y agregar `--preset=desktop` para escritorio. Repetir sobre la URL pública después del deploy: el entorno de carga puede cambiar las puntuaciones. Las pruebas automáticas se complementaron con revisión responsive en 360, 768 y 1280 px, navegación de teclado, temas y validación del formulario.
 
-## Entrega pendiente
+## Entrega
 
-Antes de entregar: publicar el repositorio, conservar commits progresivos del trabajo, hacer el deploy y agregar aquí las URLs públicas del portfolio y del repositorio. Los enlaces de los tres proyectos ya están en el sitio.
+Subir al aula virtual los enlaces del sitio público y del repositorio indicados al inicio. Revisar que el historial refleje commits progresivos del desarrollo, como exige la consigna.

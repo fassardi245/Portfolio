@@ -1,0 +1,133 @@
+---
+import Icon from './Icon.astro';
+---
+<div class="contact-form-layout">
+  <div class="form-intro">
+    <span class="form-mark" aria-hidden="true"><Icon name="mail" size={28} /></span>
+    <h3>Tu mensaje</h3>
+    <p>Completá tus datos y contame el motivo de tu consulta.</p>
+    <span class="required-note">Todos los campos son obligatorios.</span>
+  </div>
+  <form id="contact-form" action="mailto:teofassardi123@gmail.com" method="get" aria-labelledby="form-title">
+    <h3 id="form-title" class="sr-only">Formulario de contacto</h3>
+    <div class="form-fields">
+      <div class="form-field">
+        <label for="contact-name">Nombre</label>
+        <input id="contact-name" name="name" autocomplete="name" placeholder="Tu nombre" required minlength="2" maxlength="80" aria-describedby="name-error" />
+        <span class="field-error" id="name-error"></span>
+      </div>
+      <div class="form-field">
+        <label for="contact-email">Email</label>
+        <input id="contact-email" name="email" type="email" autocomplete="email" placeholder="nombre@ejemplo.com" required maxlength="254" aria-describedby="email-error" />
+        <span class="field-error" id="email-error"></span>
+      </div>
+      <div class="form-field message-field">
+        <label for="contact-message">Mensaje</label>
+        <textarea id="contact-message" name="message" rows="5" placeholder="¿Sobre qué te gustaría conversar?" required minlength="10" maxlength="2000" aria-describedby="message-hint message-error"></textarea>
+        <div class="message-meta"><span id="message-hint">Entre 10 y 2000 caracteres.</span><span id="message-count" aria-hidden="true">0 / 2000</span></div>
+        <span class="field-error" id="message-error"></span>
+      </div>
+    </div>
+    <div class="form-submit-row">
+      <button type="submit" class="button form-submit" disabled>Continuar al correo <Icon name="arrow" /></button>
+      <p class="send-note">Se abrirá tu aplicación de correo para revisar y enviar el mensaje.</p>
+    </div>
+    <p class="form-status" role="status" aria-live="polite" aria-atomic="true"></p>
+    <noscript><p>Para usar el formulario, activá JavaScript o escribime directamente a <a href="mailto:teofassardi123@gmail.com">teofassardi123@gmail.com</a>.</p></noscript>
+  </form>
+</div>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#contact-form');
+  if (form) {
+    const name = form.querySelector<HTMLInputElement>('#contact-name')!;
+    const email = form.querySelector<HTMLInputElement>('#contact-email')!;
+    const message = form.querySelector<HTMLTextAreaElement>('#contact-message')!;
+    const fields = [name, email, message];
+    const status = form.querySelector<HTMLElement>('.form-status')!;
+    const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    form.noValidate = true;
+    submit.disabled = false;
+
+    function validate(field: HTMLInputElement | HTMLTextAreaElement) {
+      const value = field.value.trim();
+      let error = '';
+      if (!value) error = field === name ? 'Ingresá tu nombre.' : field === email ? 'Ingresá tu email.' : 'Escribí tu mensaje.';
+      else if (field === name && (value.length < 2 || value.length > 80)) error = 'Usá entre 2 y 80 caracteres.';
+      else if (field === email && (email.validity.typeMismatch || value.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))) error = 'Ingresá un email válido, por ejemplo nombre@dominio.com.';
+      else if (field === message && (value.length < 10 || value.length > 2000)) error = 'El mensaje debe tener entre 10 y 2000 caracteres.';
+      const errorElement = document.getElementById(field.name + '-error');
+      if (errorElement) errorElement.textContent = error;
+      if (error) field.setAttribute('aria-invalid', 'true');
+      else field.removeAttribute('aria-invalid');
+      return !error;
+    }
+
+    fields.forEach(field => {
+      field.addEventListener('blur', () => validate(field));
+      field.addEventListener('input', () => {
+        if (field.hasAttribute('aria-invalid')) validate(field);
+        status.textContent = '';
+      });
+    });
+    message.addEventListener('input', () => {
+      document.getElementById('message-count')!.textContent = message.value.length + ' / 2000';
+    });
+
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const invalid = fields.filter(field => !validate(field));
+      if (invalid.length) {
+        status.textContent = 'Revisá los campos indicados antes de continuar.';
+        invalid[0].focus();
+        return;
+      }
+      const subject = 'Contacto desde el portfolio: ' + name.value.trim().replace(/[\r\n]/g, ' ');
+      const body = 'Nombre: ' + name.value.trim() + '\nEmail de contacto: ' + email.value.trim() + '\n\n' + message.value.trim();
+      const mailto = 'mailto:teofassardi123@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+      status.textContent = 'Mensaje preparado. Completá el envío desde tu aplicación de correo. Si no se abre, podés copiar el mensaje y usar el email de abajo.';
+      window.location.href = mailto;
+    });
+  }
+</script>
+
+<style>
+  .contact-form-layout { display: grid; grid-template-columns: .65fr 1.35fr; gap: 60px; padding: 44px; margin-top: 40px; border-radius: 8px; background: #171717; color: #f5f4ef; box-shadow: 0 12px 0 #17171714; color-scheme: dark; }
+  .form-mark { display: inline-flex; color: #ffcf24; margin-bottom: 28px; }
+  .form-intro h3 { font-size: clamp(28px, 3.4vw, 42px); line-height: 1.1; letter-spacing: -.045em; font-weight: 600; }
+  .form-intro p { font-size: 14px; line-height: 1.8; max-width: 29ch; margin-top: 18px; color: #b8b8b0; }
+  .required-note { display: block; margin-top: 28px; font-size: 12px; color: #b8b8b0; }
+  form { min-width: 0; }
+  .form-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px; }
+  .form-field { display: flex; flex-direction: column; min-width: 0; }
+  label { font-size: 14px; font-weight: 500; margin-bottom: 10px; }
+  input, textarea { width: 100%; min-height: 56px; padding: 15px 16px; border: 1px solid #72726b; background: #242423; color: #f5f4ef; border-radius: 4px; font: inherit; font-size: 16px; line-height: 1.5; transition: border-color 180ms, background-color 180ms; scroll-margin-block: 110px 24px; }
+  input::placeholder, textarea::placeholder { color: #a7a7a0; opacity: 1; }
+  input:hover, textarea:hover { border-color: #a7a7a0; }
+  textarea { resize: vertical; min-height: 170px; }
+  input:focus, textarea:focus { outline: 2px solid #ffcf24; outline-offset: 3px; border-color: #ffcf24; background: #292927; }
+  input[aria-invalid], textarea[aria-invalid] { border: 2px solid #ff9b90; padding: 14px 15px; }
+  .message-field { grid-column: 1 / -1; }
+  .field-error { min-height: 22px; font-size: 12px; color: #ff9b90; padding-top: 4px; }
+  .message-meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 12px; margin-top: 9px; font-size: 12px; color: #b8b8b0; }
+  .form-submit-row { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
+  .form-submit { width: 100%; min-height: 56px; background: #ffcf24; color: #171717; font-size: 14px; justify-content: space-between; padding-inline: 20px; }
+  .form-submit:hover { background: #ffe16e; }
+  .form-submit:focus-visible { outline: 3px solid #ffcf24; outline-offset: 5px; }
+  .send-note { font-size: 12px; line-height: 1.6; color: #b8b8b0; }
+  .form-status { font-size: 13px; line-height: 1.65; color: #f5f4ef; }
+  .form-status:not(:empty) { margin-top: 18px; padding: 14px 16px; border-left: 3px solid #ffcf24; background: #242423; }
+  button:disabled { opacity: .6; cursor: not-allowed; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  @media (max-width: 800px) {
+    .contact-form-layout { grid-template-columns: 1fr; gap: 30px; padding: 32px; }
+    .form-intro p { max-width: 60ch; }
+    .form-mark { margin-bottom: 16px; }
+    .required-note { margin-top: 12px; }
+  }
+  @media (max-width: 600px) {
+    .contact-form-layout { padding: 24px 20px; margin-top: 28px; gap: 26px; }
+    .form-fields { grid-template-columns: 1fr; gap: 10px; }
+    .form-submit-row { gap: 12px; }
+  }
+</style>

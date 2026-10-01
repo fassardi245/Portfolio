@@ -1,11 +1,205 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import { Image } from 'astro:assets';
+import portrait from '../assets/teo-fassardi.jpeg';
+import ContactForm from '../components/ContactForm.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const skills = [
+  { title: 'Frontend', icon: 'code', items: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'HTML', 'CSS', 'JavaScript'] },
+  { title: 'Backend', icon: 'layers', items: ['Node.js', 'C# / .NET', 'Prisma ORM', 'Sanity CMS', 'APIs REST'] },
+  { title: 'Bases de datos', icon: 'database', items: ['MySQL', 'PostgreSQL', 'MongoDB', 'SQL / NoSQL'] },
+  { title: 'Herramientas', icon: 'github', items: ['Git', 'GitHub', 'Stripe', 'Clerk', 'Resend'] },
+];
+const projects = [
+  {
+    title: 'SmartCloth', subtitle: 'Logistics', category: 'Comercio electrónico y logística', className: 'smartcloth',
+    description: 'Plataforma de comercio electrónico que integra ventas, inventario, distribución y análisis de datos.',
+    detail: 'Proyecto final para el título intermedio de Analista en Sistemas Informáticos. Un año de trabajo en un equipo de tres estudiantes, desde el análisis hasta la implementación.',
+    tags: ['Next.js', 'React', 'TypeScript', 'Node.js', 'Prisma', 'MySQL', 'Sanity'],
+    repo: 'https://github.com/fassardi245/Diplomaa', label: 'Proyecto final · En equipo',
+    integrations: 'Clerk, Stripe y Resend', demo: null,
+  },
+  {
+    title: 'Task', subtitle: 'Manager', category: 'Productividad personal', className: 'taskmanager',
+    description: 'Aplicación de gestión de tareas con autenticación, filtros por estado y prioridad, y persistencia en MongoDB.',
+    detail: 'Una aplicación full stack con interfaz en modo oscuro y notificaciones que acompañan cada acción.',
+    tags: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Prisma', 'MongoDB', 'Clerk'],
+    repo: 'https://github.com/fassardi245/TaskManager', label: 'Aplicación full stack', integrations: null, demo: null,
+  },
+  {
+    title: 'Futbolle', subtitle: '', category: 'Juego de adivinanza de futbolistas', className: 'futbolle',
+    description: 'Juego web para descubrir un futbolista en ocho intentos, con pistas visuales que comparan los atributos de cada jugador.',
+    detail: 'Proyecto final individual de Desarrollo y Arquitecturas Web. Tres dificultades, puntuación, historial de partidas y consumo de una API de jugadores.',
+    tags: ['HTML', 'CSS', 'JavaScript', 'Fetch API', 'LocalStorage'],
+    repo: 'https://github.com/fassardi245/Futbolle-Final-Web', label: 'Proyecto académico · Individual',
+    integrations: null, demo: 'https://fassardi245.github.io/Futbolle-Final-Web/',
+  },
+];
 ---
-
 <Layout>
-	<Welcome />
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="#inicio" aria-label="Teo Fassardi, inicio">Teo<span>.</span></a>
+      <nav aria-label="Navegación principal">
+        <a href="#proyectos">Proyectos</a>
+        <a href="#sobre-mi">Sobre mí</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+      <button class="theme-toggle" aria-label="Cambiar tema" type="button">
+        <span class="sun"><Icon name="sun" /></span><span class="moon"><Icon name="moon" /></span>
+      </button>
+    </div>
+  </header>
+  <main id="contenido" tabindex="-1">
+    <section class="hero container" id="inicio" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <h1 id="hero-title" aria-label="Teo Fassardi">TEO<br />FASSARDI<span aria-hidden="true">.</span></h1>
+        <p class="role">Full Stack Developer</p>
+        <p class="hero-description">Estudiante de Ingeniería en Sistemas.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#proyectos">Explorá mis proyectos <Icon name="arrow" /></a>
+          <a class="button cv-button" href="/CV-Teo-Fassardi.pdf" download="CV-Teo-Fassardi.pdf"><Icon name="download" size={20} /> Descargar CV <span class="file-type">PDF</span></a>
+        </div>
+      </div>
+      <figure class="portrait">
+        <div class="portrait-frame">
+          <Image src={portrait} alt="Teo Fassardi sonriendo, con una remera azul" widths={[240, 320, 600]} sizes="(max-width: 600px) 180px, (max-width: 800px) 220px, 280px" format="webp" quality={85} loading="eager" fetchpriority="high" />
+        </div>
+      </figure>
+      <div class="hero-bottom">
+        <div><a href="https://github.com/fassardi245" target="_blank" rel="noopener noreferrer">GitHub <Icon name="arrow" size={16} /></a><a href="https://www.linkedin.com/in/teo-fassardi-4207b4366/" target="_blank" rel="noopener noreferrer">LinkedIn <Icon name="arrow" size={16} /></a></div>
+      </div>
+    </section>
+    <section class="projects section-pad" id="proyectos" aria-labelledby="projects-title">
+      <div class="container">
+        <div class="section-heading">
+          <h2 id="projects-title">Proyectos</h2>
+        </div>
+        <div class="project-grid">
+          {projects.map(project => (
+            <article class:list={['project', project.className]}>
+              <div class="project-cover">
+                <p class="project-category">{project.category}</p>
+                <h3>{project.title}{project.subtitle && <><br />{project.subtitle}</>}</h3>
+                <div class="project-cover-bottom">
+                  <span>{project.label}</span>
+                  <a href={project.demo || project.repo} target="_blank" rel="noopener noreferrer" class="round-link" aria-label={project.demo ? 'Jugar a Futbolle' : 'Ver repositorio de ' + project.title + ' ' + project.subtitle}><Icon name="arrow" size={28} /></a>
+                </div>
+              </div>
+              <div class="project-info">
+                <p class="project-description">{project.description}</p>
+                <p class="project-detail">{project.detail}</p>
+                <ul class="tags" aria-label={'Tecnologías de ' + project.title}>{project.tags.map(tag => <li>{tag}</li>)}</ul>
+                {project.integrations && <p class="integrations">Integraciones: {project.integrations}.</p>}
+                <div class="project-links">
+                  <a class="project-link" href={project.repo} target="_blank" rel="noopener noreferrer" aria-label={'Repositorio de ' + project.title + ' ' + project.subtitle}><Icon name="github" size={18} /> Repositorio <Icon name="arrow" size={16} /></a>
+                  {project.demo && <a class="project-link" href={project.demo} target="_blank" rel="noopener noreferrer">Jugar ahora <Icon name="arrow" size={16} /></a>}
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+    <section class="about section-pad container" id="sobre-mi" aria-labelledby="about-title">
+      <div class="about-intro">
+        <div><h2 id="about-title">Sobre mí</h2></div>
+        <div class="about-copy">
+          <p>Soy Teo Fassardi, estudiante de Ingeniería en Sistemas y desarrollador Full Stack. Me gusta trabajar tanto en la interfaz de una aplicación como en la lógica que la hace funcionar.</p>
+          <p>Desarrollé proyectos en equipo e individuales: desde una plataforma de comercio y logística hasta una herramienta de productividad y un juego de fútbol.</p>
+          <a class="text-link" href="https://www.linkedin.com/in/teo-fassardi-4207b4366/" target="_blank" rel="noopener noreferrer">Conocé mi perfil en LinkedIn <Icon name="arrow" size={18} /></a>
+        </div>
+      </div>
+      <div class="skills-heading"><h3>Tecnologías y herramientas</h3><Icon name="code" size={24} /></div>
+      <div class="skills-grid">
+        {skills.map(skill => <div class="skill-group"><span class="skill-icon"><Icon name={skill.icon} size={24} /></span><h4>{skill.title}</h4><ul>{skill.items.map(item => <li>{item}</li>)}</ul></div>)}
+      </div>
+    </section>
+    <section class="contact-section" id="contacto" aria-labelledby="contact-title">
+      <div class="container contact-inner">
+        <div class="contact-heading"><p>¿Tenés una idea o una oportunidad?</p><h2 id="contact-title">HABLEMOS<span aria-hidden="true">↗</span></h2></div>
+        <ContactForm />
+        <div class="contact-bottom">
+          <a class="button contact-button" href="mailto:teofassardi123@gmail.com">Escribime un email <Icon name="arrow" /></a>
+          <div class="contact-details">
+            <div class="email-row"><a href="mailto:teofassardi123@gmail.com">teofassardi123@gmail.com</a><button class="copy-email" type="button" aria-label="Copiar dirección de email" title="Copiar email"><span class="copy-icon"><Icon name="copy" size={18} /></span><span class="copied-icon"><Icon name="check" size={18} /></span></button></div>
+            <span class="copy-status" role="status" aria-live="polite" aria-atomic="true"></span>
+          </div>
+          <div class="social-links"><a href="https://github.com/fassardi245" target="_blank" rel="noopener noreferrer">GitHub <Icon name="arrow" size={17} /></a><a href="https://www.linkedin.com/in/teo-fassardi-4207b4366/" target="_blank" rel="noopener noreferrer">LinkedIn <Icon name="arrow" size={17} /></a></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="container footer"><a class="brand" href="#inicio" aria-label="Teo, volver al inicio">Teo<span>.</span></a><p>© {new Date().getFullYear()} Teo Fassardi</p><a href="#inicio" class="back-top" aria-label="Volver al inicio">↑</a></footer>
+  <script>
+    const themeButton = document.querySelector<HTMLButtonElement>('.theme-toggle');
+    const media = matchMedia('(prefers-color-scheme: dark)');
+    let explicitTheme = false;
+    try { explicitTheme = ['light', 'dark'].includes(localStorage.getItem('portfolio-theme') || ''); } catch {}
+    function syncTheme(theme: string) {
+      document.documentElement.dataset.theme = theme;
+      themeButton?.setAttribute('aria-label', theme === 'dark' ? 'Activar modo claro' : 'Activar modo oscuro');
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#101010' : '#faf9f6');
+    }
+    syncTheme(document.documentElement.dataset.theme || 'light');
+    themeButton?.addEventListener('click', () => {
+      const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      explicitTheme = true;
+      syncTheme(theme);
+      try { localStorage.setItem('portfolio-theme', theme); } catch {}
+    });
+    media.addEventListener('change', event => { if (!explicitTheme) syncTheme(event.matches ? 'dark' : 'light'); });
+    const copyButton = document.querySelector<HTMLButtonElement>('.copy-email');
+    const copyStatus = document.querySelector<HTMLElement>('.copy-status');
+    let resetCopy: ReturnType<typeof setTimeout>;
+    copyButton?.addEventListener('click', async () => {
+      clearTimeout(resetCopy);
+      if (copyStatus) copyStatus.textContent = '';
+      try {
+        await navigator.clipboard.writeText('teofassardi123@gmail.com');
+        copyButton.dataset.copied = 'true';
+        copyButton.setAttribute('aria-label', 'Email copiado. Copiar nuevamente');
+        if (copyStatus) copyStatus.textContent = 'Email copiado.';
+        resetCopy = setTimeout(() => {
+          delete copyButton.dataset.copied;
+          copyButton.setAttribute('aria-label', 'Copiar dirección de email');
+          if (copyStatus) copyStatus.textContent = '';
+        }, 3500);
+      } catch {
+        delete copyButton.dataset.copied;
+        copyButton.setAttribute('aria-label', 'Copiar dirección de email');
+        if (copyStatus) copyStatus.textContent = 'Seleccioná el email para copiarlo manualmente.';
+      }
+    });
+    const navLinks = document.querySelectorAll<HTMLAnchorElement>('nav a');
+    const sections = [...document.querySelectorAll<HTMLElement>('main section[id]')];
+    let scrollPending = false;
+    function updateNavigation() {
+      const headerHeight = document.querySelector('header')?.getBoundingClientRect().height || 88;
+      const activationLine = headerHeight + Math.min(innerHeight * .2, 160);
+      let activeId = 'inicio';
+      for (const section of sections) {
+        if (section.getBoundingClientRect().top <= activationLine) activeId = section.id;
+      }
+      if (scrollY + innerHeight >= document.documentElement.scrollHeight - 4) activeId = 'contacto';
+      navLinks.forEach(link => {
+        if (link.hash === '#' + activeId) link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+      });
+      scrollPending = false;
+    }
+    function scheduleNavigation() {
+      if (!scrollPending) {
+        scrollPending = true;
+        requestAnimationFrame(updateNavigation);
+      }
+    }
+    addEventListener('scroll', scheduleNavigation, { passive: true });
+    addEventListener('resize', scheduleNavigation);
+    addEventListener('pageshow', scheduleNavigation);
+    document.fonts.ready.then(scheduleNavigation);
+    scheduleNavigation();
+  </script>
 </Layout>

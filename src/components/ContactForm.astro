@@ -46,17 +46,20 @@ import Icon from './Icon.astro';
     const fields = [name, email, message];
     const status = form.querySelector<HTMLElement>('.form-status')!;
     const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const count = form.querySelector<HTMLElement>('#message-count')!;
+    const touched = new Set<HTMLInputElement | HTMLTextAreaElement>();
     form.noValidate = true;
     submit.disabled = false;
 
     function validate(field: HTMLInputElement | HTMLTextAreaElement) {
+      touched.add(field);
       const value = field.value.trim();
       let error = '';
       if (!value) error = field === name ? 'Ingresá tu nombre.' : field === email ? 'Ingresá tu email.' : 'Escribí tu mensaje.';
       else if (field === name && (value.length < 2 || value.length > 80)) error = 'Usá entre 2 y 80 caracteres.';
       else if (field === email && (email.validity.typeMismatch || value.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))) error = 'Ingresá un email válido, por ejemplo nombre@dominio.com.';
       else if (field === message && (value.length < 10 || value.length > 2000)) error = 'El mensaje debe tener entre 10 y 2000 caracteres.';
-      const errorElement = document.getElementById(field.name + '-error');
+      const errorElement = form!.querySelector<HTMLElement>('#' + field.name + '-error');
       if (errorElement) errorElement.textContent = error;
       if (error) field.setAttribute('aria-invalid', 'true');
       else field.removeAttribute('aria-invalid');
@@ -66,13 +69,14 @@ import Icon from './Icon.astro';
     fields.forEach(field => {
       field.addEventListener('blur', () => validate(field));
       field.addEventListener('input', () => {
-        if (field.hasAttribute('aria-invalid')) validate(field);
+        if (touched.has(field)) validate(field);
         status.textContent = '';
       });
     });
-    message.addEventListener('input', () => {
-      document.getElementById('message-count')!.textContent = message.value.length + ' / 2000';
-    });
+    const updateCount = () => { count.textContent = message.value.length + ' / 2000'; };
+    message.addEventListener('input', updateCount);
+    window.addEventListener('pageshow', updateCount);
+    updateCount();
 
     form.addEventListener('submit', event => {
       event.preventDefault();
@@ -92,31 +96,32 @@ import Icon from './Icon.astro';
 </script>
 
 <style>
-  .contact-form-layout { display: grid; grid-template-columns: .65fr 1.35fr; gap: 60px; padding: 44px; margin-top: 40px; border-radius: 8px; background: #171717; color: #f5f4ef; box-shadow: 0 12px 0 #17171714; color-scheme: dark; }
-  .form-mark { display: inline-flex; color: #ffcf24; margin-bottom: 28px; }
+  .contact-form-layout { --field-border: color-mix(in srgb, var(--muted) 70%, var(--bg)); --field-error: #ad241b; display: grid; grid-template-columns: .65fr 1.35fr; gap: 60px; padding: 44px; margin-top: 40px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); box-shadow: 0 12px 0 #17171714; color-scheme: inherit; }
+  :global([data-theme='dark']) .contact-form-layout { --field-error: #ff9b90; }
+  .form-mark { display: inline-flex; color: var(--accent); margin-bottom: 28px; }
   .form-intro h3 { font-size: clamp(28px, 3.4vw, 42px); line-height: 1.1; letter-spacing: -.045em; font-weight: 600; }
-  .form-intro p { font-size: 14px; line-height: 1.8; max-width: 29ch; margin-top: 18px; color: #b8b8b0; }
-  .required-note { display: block; margin-top: 28px; font-size: 12px; color: #b8b8b0; }
+  .form-intro p { font-size: 14px; line-height: 1.8; max-width: 29ch; margin-top: 18px; color: var(--muted); }
+  .required-note { display: block; margin-top: 28px; font-size: 12px; color: var(--muted); }
   form { min-width: 0; }
   .form-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px; }
   .form-field { display: flex; flex-direction: column; min-width: 0; }
   label { font-size: 14px; font-weight: 500; margin-bottom: 10px; }
-  input, textarea { width: 100%; min-height: 56px; padding: 15px 16px; border: 1px solid #72726b; background: #242423; color: #f5f4ef; border-radius: 4px; font: inherit; font-size: 16px; line-height: 1.5; transition: border-color 180ms, background-color 180ms; scroll-margin-block: 110px 24px; }
-  input::placeholder, textarea::placeholder { color: #a7a7a0; opacity: 1; }
-  input:hover, textarea:hover { border-color: #a7a7a0; }
+  input, textarea { width: 100%; min-height: 56px; padding: 15px 16px; border: 1px solid var(--field-border); background: var(--surface); color: var(--ink); border-radius: 4px; font: inherit; font-size: 16px; line-height: 1.5; transition: border-color 180ms, background-color 180ms; scroll-margin-block: 110px 24px; }
+  input::placeholder, textarea::placeholder { color: var(--muted); opacity: 1; }
+  input:hover, textarea:hover { border-color: var(--muted); }
   textarea { resize: vertical; min-height: 170px; }
-  input:focus, textarea:focus { outline: 2px solid #ffcf24; outline-offset: 3px; border-color: #ffcf24; background: #292927; }
-  input[aria-invalid], textarea[aria-invalid] { border: 2px solid #ff9b90; padding: 14px 15px; }
+  input:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 3px; border-color: var(--accent); background: var(--bg); }
+  input[aria-invalid], textarea[aria-invalid] { border: 2px solid var(--field-error); padding: 14px 15px; }
   .message-field { grid-column: 1 / -1; }
-  .field-error { min-height: 22px; font-size: 12px; color: #ff9b90; padding-top: 4px; }
-  .message-meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 12px; margin-top: 9px; font-size: 12px; color: #b8b8b0; }
+  .field-error { min-height: 22px; font-size: 12px; color: var(--field-error); padding-top: 4px; }
+  .message-meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 12px; margin-top: 9px; font-size: 12px; color: var(--muted); }
   .form-submit-row { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
   .form-submit { width: 100%; min-height: 56px; background: #ffcf24; color: #171717; font-size: 14px; justify-content: space-between; padding-inline: 20px; }
   .form-submit:hover { background: #ffe16e; }
-  .form-submit:focus-visible { outline: 3px solid #ffcf24; outline-offset: 5px; }
-  .send-note { font-size: 12px; line-height: 1.6; color: #b8b8b0; }
-  .form-status { font-size: 13px; line-height: 1.65; color: #f5f4ef; }
-  .form-status:not(:empty) { margin-top: 18px; padding: 14px 16px; border-left: 3px solid #ffcf24; background: #242423; }
+  .contact-form-layout .form-submit:focus-visible { outline: 3px solid var(--accent); outline-offset: 5px; }
+  .send-note { font-size: 12px; line-height: 1.6; color: var(--muted); }
+  .form-status { font-size: 13px; line-height: 1.65; color: var(--ink); overflow-wrap: anywhere; }
+  .form-status:not(:empty) { margin-top: 18px; padding: 14px 16px; border-left: 3px solid var(--accent); background: var(--surface); }
   button:disabled { opacity: .6; cursor: not-allowed; }
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   @media (max-width: 800px) {

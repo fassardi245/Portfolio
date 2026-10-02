@@ -17,7 +17,7 @@ const projects = [
     description: 'Plataforma de comercio electrónico que integra ventas, inventario, distribución y análisis de datos.',
     detail: 'Proyecto final para el título intermedio de Analista en Sistemas Informáticos. Un año de trabajo en un equipo de tres estudiantes, desde el análisis hasta la implementación.',
     tags: ['Next.js', 'React', 'TypeScript', 'Node.js', 'Prisma', 'MySQL', 'Sanity'],
-    repo: 'https://github.com/fassardi245/Diplomaa', label: 'Proyecto final · En equipo',
+    repo: 'https://github.com/fassardi245/SmartCloth', label: 'Proyecto final · En equipo',
     integrations: 'Clerk, Stripe y Resend', demo: null,
   },
   {
@@ -119,7 +119,7 @@ const projects = [
     </section>
     <section class="contact-section" id="contacto" aria-labelledby="contact-title">
       <div class="container contact-inner">
-        <div class="contact-heading"><p>¿Tenés una idea o una oportunidad?</p><h2 id="contact-title">HABLEMOS<span aria-hidden="true">↗</span></h2></div>
+        <div class="contact-heading"><p>¿Tenés una idea o una oportunidad?</p><h2 id="contact-title">HABLEMOS<span class="contact-arrow" aria-hidden="true"><Icon name="arrow" size="1em" /></span></h2></div>
         <ContactForm />
         <div class="contact-bottom">
           <a class="button contact-button" href="mailto:teofassardi123@gmail.com">Escribime un email <Icon name="arrow" /></a>
@@ -132,7 +132,7 @@ const projects = [
       </div>
     </section>
   </main>
-  <footer class="container footer"><a class="brand" href="#inicio" aria-label="Teo, volver al inicio">Teo<span>.</span></a><p>© {new Date().getFullYear()} Teo Fassardi</p><a href="#inicio" class="back-top" aria-label="Volver al inicio">↑</a></footer>
+  <footer class="container footer"><a class="brand" href="#inicio" aria-label="Teo, volver al inicio">Teo<span>.</span></a><p>© {new Date().getFullYear()} Teo Fassardi</p><a href="#inicio" class="back-top" aria-label="Volver al inicio"><Icon name="up" size={24} /></a></footer>
   <script>
     const themeButton = document.querySelector<HTMLButtonElement>('.theme-toggle');
     const media = matchMedia('(prefers-color-scheme: dark)');

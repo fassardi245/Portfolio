@@ -5,7 +5,7 @@ Portfolio personal desarrollado para el **Trabajo Práctico N.º 1: Portfolio**.
 ## Enlaces de entrega
 
 - **Sitio publicado en Vercel:** [portfolio-nine-swart-86.vercel.app](https://portfolio-nine-swart-86.vercel.app/)
-- **Repositorio público:** [github.com/fassardi245/Portfolio](https://github.com/fassardi245/Portfolio)
+- **Repositorio público:** [github.com/TeoFassardi/Portfolio](https://github.com/TeoFassardi/Portfolio)
 - **CV en PDF:** [Descargar CV](https://portfolio-nine-swart-86.vercel.app/CV-Teo-Fassardi.pdf)
 
 ## Stack elegido
@@ -25,7 +25,7 @@ Se eligió Astro porque el portfolio es principalmente contenido estático y per
 Requisitos: **Node.js 22.12 o superior** y **npm**.
 
 ```sh
-git clone https://github.com/fassardi245/Portfolio.git
+git clone https://github.com/TeoFassardi/Portfolio.git
 cd Portfolio
 npm install
 npm run dev -- --background
@@ -73,9 +73,9 @@ Configuración en Vercel:
 
 | Proyecto | Descripción | Enlaces |
 | --- | --- | --- |
-| SmartCloth Logistics | Plataforma de comercio electrónico, inventario y gestión logística, desarrollada en equipo como proyecto final académico. | [Repositorio](https://github.com/fassardi245/Diplomaa) |
-| Task Manager | Aplicación full stack de gestión de tareas con autenticación y filtros por estado y prioridad. | [Repositorio](https://github.com/fassardi245/TaskManager) |
-| Futbolle | Juego de adivinanza de futbolistas con tres dificultades, pistas, puntuación e historial de partidas. | [Repositorio](https://github.com/fassardi245/Futbolle-Final-Web) · [Demo](https://fassardi245.github.io/Futbolle-Final-Web/) |
+| SmartCloth Logistics | Plataforma de comercio electrónico, inventario y gestión logística, desarrollada en equipo como proyecto final académico. | [Repositorio](https://github.com/TeoFassardi/Diplomaa) |
+| Task Manager | Aplicación full stack de gestión de tareas con autenticación y filtros por estado y prioridad. | [Repositorio](https://github.com/TeoFassardi/TaskManager) |
+| Futbolle | Juego de adivinanza de futbolistas con tres dificultades, pistas, puntuación e historial de partidas. | [Repositorio](https://github.com/TeoFassardi/Futbolle-Final-Web) · [Demo](https://fassardi245.github.io/Futbolle-Final-Web/) |
 
 ## Formulario de contacto
 
@@ -124,5 +124,5 @@ docs/lighthouse/
 **Teo Fassardi** · Full Stack Developer · Estudiante de Ingeniería en Sistemas.
 
 - [teofassardi123@gmail.com](mailto:teofassardi123@gmail.com)
-- [GitHub](https://github.com/fassardi245)
+- [GitHub](https://github.com/TeoFassardi)
 - [LinkedIn](https://www.linkedin.com/in/teo-fassardi-4207b4366/)
